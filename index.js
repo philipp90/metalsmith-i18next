@@ -149,6 +149,9 @@ module.exports = function(options) {
 					    p = localizedFilePath(file, locale),
 					    dot = ((f.i18nPrefix || '').indexOf(':') < 0)? ':' : '.'
 
+					// Add the current locale
+					f.locale = locale
+
 					// Create some template helper functions: t, tt, tpath
 					f.t = function(key, options) {
 
