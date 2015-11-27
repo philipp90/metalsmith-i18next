@@ -1,0 +1,5 @@
+---
+i18nNamespace: translations
+i18nPrefix: home
+---
+= @tt('hello')
