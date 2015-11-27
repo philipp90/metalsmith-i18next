@@ -118,4 +118,23 @@ describe('metalsmith-i18next', function(){
 			frFile.locale.should.equal('fr')
 		}
 	))
+
+
+	it('should allow tpath to override the locale', metalsmithTest(
+		{		
+			pattern: '**/*.hamlc',
+			locales: ['en','fr'],
+			nsPath: './examples/locales/__lng__/__ns__.json',
+			namespaces: ['translations']
+		},
+		function(files) {
+
+			var enFile = files['en/index.txt']
+
+			should.exist(enFile)
+
+			enFile.tpath('/toto.txt').should.equal('/en/toto.txt')
+			enFile.tpath('/toto.txt','fr').should.equal('/fr/toto.txt')
+		}
+	))
 })

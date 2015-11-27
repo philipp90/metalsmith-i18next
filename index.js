@@ -168,10 +168,10 @@ module.exports = function(options) {
 						return f.t(f.i18nPrefix + '.' + key, options)
 					}
 
-					f.tpath = function(path) {					
+					f.tpath = function(path, lang) {					
 						if (path[0] !== '/') 
 							return path
-						return '/' + localizedFilePath(path.slice(1),locale)
+						return '/' + localizedFilePath(path.slice(1), lang || locale)
 					}
 
 					// Add the new file to the list of files
