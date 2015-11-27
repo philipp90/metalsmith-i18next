@@ -1,6 +1,6 @@
 {
   "name": "metalsmith-i18next",
-  "version": "0.2.0",
+  "version": "0.2.1",
   "description": "Metalsmith plugin for i18next and generating your site in multiple languages.",
   "keywords": [
     "metalsmith",
@@ -16,6 +16,7 @@
   "author": "Eric Methot <em@nuascent.com>",
   "license": "MIT",
   "dependencies": {
+    "debug": "2.2.0",
     "i18next": "1.10.6",
     "multimatch": "2.1.0"
   },
@@ -28,7 +29,6 @@
   },
   "devDependencies": {
     "chai": "3.4.1",
-    "debug": "2.2.0",
     "haml-coffee": "1.14.1",
     "metalsmith": "2.1.0",
     "metalsmith-copy": "0.2.1",
