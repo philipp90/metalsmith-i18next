@@ -3,7 +3,8 @@
 var i18next    = require('i18next'),
 	multimatch = require('multimatch'),
 	path       = require('path'),
-	debug      = require('debug')('metalsmith-i18next')
+	debug      = require('debug')('metalsmith-i18next'),
+	url        = require('url')
 
 /**
 
@@ -103,17 +104,27 @@ module.exports = function(options) {
 
 	function localizedFilePath(file, locale) {
 
-		var ext   = path.extname(file),
-			base  = path.basename(file),
-			dir   = path.dirname(file),
-			name  = path.basename(file, ext),
-			parts = {ext, base, dir, name, file, locale}
+		var urlParts = url.parse(file, true),
+		    pathname = urlParts.pathname
+
+		var ext   = path.extname(pathname),
+			base  = path.basename(pathname),
+			dir   = path.dirname(pathname),
+			name  = path.basename(pathname, ext),
+			parts = file? {ext, base, dir, name, file, locale} : 
+			        {ext:'',base:'',dir:'.',name:'',file:'', locale}
 
 		debug(parts)
 
-		return pathpat.replace(/:(\w+)/g, function(match){			
-			return parts[match.slice(1)] || match
+		urlParts.pathname = pathpat.replace(/:(\w+)/g, function(match){
+			var subst = parts[match.slice(1)]
+			return (subst !== undefined)? subst : match
 		}).replace(/^\.\//, '')
+
+		if (pathname && pathname.slice(-1) === '/')
+			urlParts.pathname = urlParts.pathname + '/'
+
+		return url.format(urlParts)
 	}
 
 
