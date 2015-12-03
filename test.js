@@ -126,6 +126,7 @@ describe('metalsmith-i18next', function(){
 			locale = prop('en'),
 			tpath  = helpers(i18next, {path, locale}).tpath
 
+		tpath('/').should.equal('/en')
 		tpath('/index.html').should.equal('/en/index.html')
 		tpath('/index.html','fr').should.equal('/fr/index.html')
 
