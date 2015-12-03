@@ -3,7 +3,9 @@
 var chai       = require('chai'),
 	should     = chai.should(),
 	Metalsmith = require('metalsmith'),
-	i18next    = require('.'),
+	i18next    = require('i18next'),
+	i18nextMS  = require('.'),
+	helpers    = require('./lib/helpers'),
 	copy       = require('metalsmith-copy'),
 	templates  = require('metalsmith-in-place')
 
@@ -20,7 +22,7 @@ describe('metalsmith-i18next', function(){
 
 		return function(done) {
 			Metalsmith('./examples')
-			.use(i18next(config))
+			.use(i18nextMS(config))
 			.use(templates({
 				engine: 'haml-coffee',
 				pattern:  '**/*.hamlc'
@@ -44,6 +46,95 @@ describe('metalsmith-i18next', function(){
 		}
 	}
 
+	function prop(value) {
+		return function(v) {
+			return arguments.length? (value = v) : value
+		}
+	}
+
+
+	// ------------------------------------------------------------------------
+	// Helper Test Cases
+	// ------------------------------------------------------------------------
+
+	it('should return the expected file parts', function(done){
+
+		i18next.init({
+			lng: 'en',
+			resGetPath: './examples/locales/__lng__/__ns__.json',
+			ns: {namespaces:['translations'], defaultNs:'translations'},
+			preload: ['en','fr'],
+			getAsync: false,
+			fallbackLng: false
+		})
+
+		var fileParts = helpers(i18next).fileParts,
+			parts
+
+		fileParts('index.html').should.eql({
+			file:   'index.html',
+        	ext:    '.html',
+        	base:   'index.html',
+        	dir:    '',
+        	name:   'index',
+        	locale: 'en',
+        	hash:   '',
+        	query:  ''
+		})
+
+		fileParts('a/b/index.php?filter=cars').should.eql({
+			file:   'a/b/index.php?filter=cars',
+        	ext:    '.php',
+        	base:   'index.php',
+        	dir:    'a/b',
+        	name:   'index',
+        	locale: 'en',
+        	hash:   '',
+        	query:  '?filter=cars'
+		})
+
+		fileParts('computers/laptop.html#specs','fr').should.eql({
+			file:   'computers/laptop.html#specs',
+        	ext:    '.html',
+        	base:   'laptop.html',
+        	dir:    'computers',
+        	name:   'laptop',
+        	locale: 'fr',
+        	hash:   '#specs',
+        	query:  ''
+		})
+
+		fileParts('a/b/index.php?filter=cars#heading','fr').should.eql({
+			file:   'a/b/index.php?filter=cars#heading',
+        	ext:    '.php',
+        	base:   'index.php',
+        	dir:    'a/b',
+        	name:   'index',
+        	locale: 'fr',
+        	hash:   '#heading',
+        	query:  '?filter=cars'
+		})
+
+		done()
+	})
+
+	it('should localize the path as expected', function(done){
+
+		var path   = prop(':locale/:file'),
+			locale = prop('en'),
+			tpath  = helpers(i18next, {path, locale}).tpath
+
+		tpath('/index.html').should.equal('/en/index.html')
+		tpath('/index.html','fr').should.equal('/fr/index.html')
+
+		path(':dir/:name-:locale:ext:query:hash')
+		tpath('/foo/bar.php?filter=cars#heading').should.equal('/foo/bar-en.php?filter=cars#heading')
+		
+		locale('fr')
+		tpath('/foo/bar.php?filter=cars#heading').should.equal('/foo/bar-fr.php?filter=cars#heading')
+
+		done()
+	})
 
 
 	// ------------------------------------------------------------------------
@@ -67,6 +158,9 @@ describe('metalsmith-i18next', function(){
 
 			enFile.contents.toString('utf8').should.equal('Hello')
 			frFile.contents.toString('utf8').should.equal('Bonjour')
+
+			should.exist(enFile.i18nBootstrap)
+			should.exist(frFile.i18nBootstrap)
 		}
 	))
 
