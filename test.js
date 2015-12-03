@@ -7,7 +7,8 @@ var chai       = require('chai'),
 	i18nextMS  = require('.'),
 	helpers    = require('./lib/helpers'),
 	copy       = require('metalsmith-copy'),
-	templates  = require('metalsmith-in-place')
+	templates  = require('metalsmith-in-place'),
+	uglify     = require('metalsmith-uglify')
 
 describe('metalsmith-i18next', function(){
 
@@ -32,6 +33,7 @@ describe('metalsmith-i18next', function(){
 				extension: '.txt',
 				move: true
 			}))
+			.use(uglify())
 			.build(function(err, files){
 				if (once) return
 				once = true
@@ -138,7 +140,7 @@ describe('metalsmith-i18next', function(){
 
 
 	// ------------------------------------------------------------------------
-	// Actual Test Cases
+	// Normal Test Cases
 	// ------------------------------------------------------------------------
 
 	it('should create two localised directories each with index.txt', metalsmithTest(
