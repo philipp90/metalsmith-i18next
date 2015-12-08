@@ -164,6 +164,9 @@ describe('metalsmith-i18next', function(){
 
 			should.exist(enFile.i18nBootstrap)
 			should.exist(frFile.i18nBootstrap)
+
+			should.exist(enFile.i18nOrigPath)
+			should.exist(frFile.i18nOrigPath)
 		}
 	))
 

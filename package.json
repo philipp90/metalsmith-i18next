@@ -1,6 +1,6 @@
 {
   "name": "metalsmith-i18next",
-  "version": "0.2.12",
+  "version": "0.2.13",
   "description": "Metalsmith plugin for i18next and generating your site in multiple languages.",
   "keywords": [
     "metalsmith",
