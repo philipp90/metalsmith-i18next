@@ -171,8 +171,8 @@ describe('metalsmith-i18next', function(){
 			should.exist(enFile.i18nResStore)
 			should.exist(frFile.i18nResStore)
 
-			enFile.i18nResStore.should.eql({en: {translations: {home: {hello: 'Hello'}}}})
-			frFile.i18nResStore.should.eql({fr: {translations: {home: {hello: 'Bonjour'}}}})
+			enFile.i18nResStore.should.eql({en: {translations: {home: {hello: 'Hello'}},foo:{foo:{bar:'Foobar'}}}})
+			frFile.i18nResStore.should.eql({fr: {translations: {home: {hello: 'Bonjour'}},foo:{foo:{bar:'Foobar!!'}}}})
 		}
 	))
 
