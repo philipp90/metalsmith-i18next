@@ -139,6 +139,21 @@ describe('metalsmith-i18next', function(){
 		done()
 	})
 
+	it('should translate as expected', function(done){
+
+		var path      = prop(':locale/:file'),
+			locale    = prop('fr'),
+			prefix    = prop(['home','common']),
+			namespace = prop('translations'),
+			fn        = helpers(i18next, {path, prefix, locale, namespace})
+
+		fn.t('translations:home.hello',{lng:'fr'}).should.equal('Bonjour')
+		fn.tt('hello').should.equal('Bonjour')
+		fn.tt('foo').should.equal('Fou!!!')
+		fn.tt('bar').should.equal('[home,common].bar')
+		done()
+	})
+
 
 	// ------------------------------------------------------------------------
 	// Normal Test Cases
@@ -171,8 +186,8 @@ describe('metalsmith-i18next', function(){
 			should.exist(enFile.i18nResStore)
 			should.exist(frFile.i18nResStore)
 
-			enFile.i18nResStore.should.eql({en: {translations: {home: {hello: 'Hello'}},foo:{foo:{bar:'Foobar'}}}})
-			frFile.i18nResStore.should.eql({fr: {translations: {home: {hello: 'Bonjour'}},foo:{foo:{bar:'Foobar!!'}}}})
+			enFile.i18nResStore.should.eql({en: {translations: {common:{foo:'Foo!!!'}, home: {hello: 'Hello'}},foo:{foo:{bar:'Foobar'}}}})
+			frFile.i18nResStore.should.eql({fr: {translations: {common:{foo:'Fou!!!'}, home: {hello: 'Bonjour'}},foo:{foo:{bar:'Foobar!!'}}}})
 		}
 	))
 

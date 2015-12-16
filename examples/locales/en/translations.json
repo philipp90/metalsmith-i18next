@@ -1,4 +1,8 @@
 {
+	"common": {
+		"foo":"Foo!!!"
+	},
+
 	"home": {
 		"hello": "Hello"
 	}
